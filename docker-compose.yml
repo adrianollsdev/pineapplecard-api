@@ -1,0 +1,68 @@
+####
+# ATTENTION:
+# Replace all occurrences of sandbox with your project's name.
+####
+
+# v3 syntax
+version: '3'
+
+# Named volumes
+volumes:
+
+  # MySQL Data
+  pineapplecard-mysql-data:
+    driver: local
+
+  # Redis Data
+  pineapplecard-redis-data:
+    driver: local
+
+services:
+
+  # MySQL (5.7)
+  mysql:
+    image: mysql:5.7
+    container_name: pineapplecard-mysql
+    volumes:
+      - pineapplecard-mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=pineapplecard
+      - MYSQL_DATABASE=pineapplecard
+      - MYSQL_USER=pineapplecard
+      - MYSQL_PASSWORD=pineapplecard
+
+  # Redis
+  cache:
+    image: redis:4.0
+    container_name: pineapplecard-redis
+    command: --appendonly yes
+    volumes:
+      - pineapplecard-redis-data:/data
+    ports:
+      - "6379:6379"
+
+  # PHP (with Nginx)
+  app:
+    image: ambientum/php:7.3-nginx
+    container_name: pineapplecard-app
+    volumes:
+      - ./api:/var/www/app
+    ports:
+      - "8080:8080"
+      - "8083:8083"
+    links:
+      - mysql
+      - cache
+
+  # Laravel Queues
+  queue:
+    image: ambientum/php:7.3
+    container_name: pineapplecard-queue
+    command: php artisan queue:listen
+    volumes:
+      - ./api:/var/www/app
+    links:
+      - mysql
+      - cache
