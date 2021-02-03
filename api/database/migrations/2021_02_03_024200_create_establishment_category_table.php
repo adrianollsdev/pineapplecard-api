@@ -13,7 +13,7 @@ class CreateEstablishmentCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('establishment_category', function (Blueprint $table) {
+        Schema::create('establishment_categorys', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
             $table->decimal('score_rate', $precision = 8, $scale = 2);
