@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,5 +22,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('profile')->group(function(){
         Route::get('/{id}', [ProfileController::class, 'show']);
+});
+
+Route::prefix('payment')->group(function(){
+        Route::get('/{id}', [PaymentController::class, 'show']);
 });
 

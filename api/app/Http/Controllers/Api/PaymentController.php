@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PaymentCollection;
+use App\Models\Payment;
 use Illuminate\Http\Request;
-use App\Http\Resources\ProfileCollection;
-use App\Models\Profile;
 
-class ProfileController extends Controller
+class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -39,7 +39,7 @@ class ProfileController extends Controller
     public function show($id)
     {
         //
-        return new ProfileCollection(Profile::find($id));
+        return new PaymentCollection(Payment::with('establishmentCategory')->where('id', $id)->get());
     }
 
     /**
