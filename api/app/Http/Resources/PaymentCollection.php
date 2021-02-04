@@ -12,6 +12,8 @@ class PaymentCollection extends ResourceCollection
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
+    public static $wrap = 'payments';
+
     public function toArray($request)
     {
         return parent::toArray($request);
