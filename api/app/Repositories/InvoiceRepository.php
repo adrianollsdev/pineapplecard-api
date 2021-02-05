@@ -32,7 +32,7 @@ class InvoiceRepository
         $initialDate = $this->dayClosure($dueDate->copy()->subMonth())->addDay();
         $finalDate   = $this->dayClosure($dueDate->copy());
 
-        return array('initialDate' => $initialDate->toDate(), 'finalDate' => $finalDate->toDate());
+        return array('initialDate' => $initialDate->format('Y-m-d'), 'finalDate' => $finalDate->format('Y-m-d'));
     }
 
     public function invoiceByDueDate($dueDate)
