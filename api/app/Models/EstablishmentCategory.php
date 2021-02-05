@@ -12,8 +12,8 @@ class EstablishmentCategory extends Model
     /**
      * Get the payments for the EstablishmentCategory.
      */
-    public function payments()
+    public function establishment()
     {
-        return $this->hasMany(Payment::class, "establishment_category_id");
+        return $this->hasMany(Establishment::class, "establishment_category_id");
     }
 }

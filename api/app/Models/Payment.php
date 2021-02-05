@@ -9,12 +9,9 @@ class Payment extends Model
 {
     use HasFactory;
 
-    /**
-     * Get the EstablishmentCategory that owns the Payment.
-     */
-    public function establishmentCategory()
+    public function establishment()
     {
-        return $this->belongsTo(EstablishmentCategory::class, "establishment_category_id");
+        return $this->belongsTo(Establishment::class, "establishment_id");
     }
 
     /**

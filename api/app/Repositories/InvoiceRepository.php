@@ -40,7 +40,7 @@ class InvoiceRepository
         // echo "[InvoiceOpen] Starting...\n";
         $invoicePeriod = $this->invoicePeriod($dueDate);
 
-        return $this->payment->with('establishmentCategory')
+        return $this->payment->with('establishment.establishmentCategory')
                                        ->whereBetween('created_at', array_values($invoicePeriod))
                                        ->orderBy('created_at', 'desc')
                                        ->get();

@@ -16,13 +16,11 @@ class CreatePaymentTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->dateTime('created_at', $precision = 0);
+            $table->char('ref_month_year', 7)->nullable;
             $table->char('type', 1);
-            $table->string('establishment_name', 100);
-            $table->decimal('establishment_latitude', $precision = 8, $scale = 6);
-            $table->decimal('establishment_longitude', $precision = 9, $scale = 6);
             $table->decimal('amount', $precision = 8, $scale = 2);
-            $table->foreignId('establishment_category_id')->constrained('establishment_category');
-            $table->foreignId('user_id')->constrained('profile');;
+            $table->foreignId('establishment_id')->constrained('establishments')->nullable();
+            $table->foreignId('user_id')->constrained('profiles');
         });
     }
 

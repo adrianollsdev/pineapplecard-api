@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Payment;
+use App\Repositories\InvoiceRepository;
 
 class PaymentRepository
 {
@@ -10,11 +10,17 @@ class PaymentRepository
      * @var Payment
      */
 
-    private $payment;
+    private $invoice;
 
-    public function __construct(Payment $payment)
+    public function __construct(InvoiceRepository $invoice)
     {
-        $this->payment = $payment;
+        $this->invoice = $invoice;
     }
+
+    public function openPayments(){
+
+    }
+
+
 }
 

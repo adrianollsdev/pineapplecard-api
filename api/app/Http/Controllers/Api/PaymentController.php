@@ -39,7 +39,7 @@ class PaymentController extends Controller
     public function show($id)
     {
         //
-        return new PaymentCollection(Payment::with('establishmentCategory')->where('id', $id)->get());
+        return new PaymentCollection(Payment::with('establishment.establishmentCategory')->where('id', $id)->get());
     }
 
     /**
