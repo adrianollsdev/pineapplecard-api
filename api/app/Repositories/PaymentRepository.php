@@ -26,7 +26,7 @@ class PaymentRepository
     }
 
     public function valueOpenPayments(Carbon $dateCarbon, $dueDay){
-        $lastRefPeriodPaid = $dateCarbon->create($this->payment->max('ref_month_year'))->day($dueDay);
+        $lastRefPeriodPaid = $dateCarbon->create($this->payment->max('ref_month_year'))->addMonth()->day($dueDay);
         $lastDateClosurePaid = $this->dateClosure($lastRefPeriodPaid)->endOfDay();
 
         return $this->payment->where('created_at', '>', $lastDateClosurePaid)->sum('amount');

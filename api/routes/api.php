@@ -21,9 +21,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('profile')->group(function(){
-        Route::get('/{id}', [ProfileController::class, 'show']);
-});
+// Route::prefix('profile')->group(function(){
+//     Route::apiResource('profile', PhotoController::class);
+// });
+
+Route::apiResource('profile', ProfileController::class);
 
 Route::prefix('payment')->group(function(){
         Route::get('/{id}', [PaymentController::class, 'show']);

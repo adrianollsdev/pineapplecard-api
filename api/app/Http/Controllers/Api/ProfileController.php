@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Resources\ProfileCollection;
+use App\Models\Payment;
 use App\Models\Profile;
+use App\Repositories\PaymentRepository;
+use App\Repositories\ProfileRepository;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
@@ -36,10 +39,15 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Profile $profile)
     {
         //
-        return new ProfileCollection(Profile::find($id));
+        $payment = new Payment();
+        $paymentRepository = new PaymentRepository($payment);
+        $profile = new ProfileRepository($profile, $paymentRepository);
+        $dateCarbon = new Carbon();
+
+        return $profile->getProfile($dateCarbon);
     }
 
     /**

@@ -3,11 +3,8 @@
 namespace Tests\Unit;
 
 use Mockery as m;
-
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-
 use App\Repositories\PaymentRepository;
-// use Carbon\Carbon;
 
 class PaymentRepositoryTest extends TestCase
 {
@@ -18,7 +15,7 @@ class PaymentRepositoryTest extends TestCase
         $this->paymentRepository = new PaymentRepository($this->payment);
     }
 
-    public function test_dateClosure_WhenCalledWithDueDate20210215_Return20210205()
+    public function test_dateClosure_WhenCalledWithDueDate_ReturnCarbon()
     {
 
         $this->carbon->shouldReceive('create', 'day', 'endOfDay', 'subDays')
@@ -36,7 +33,7 @@ class PaymentRepositoryTest extends TestCase
                       ->withAnyArgs()
                       ->andReturnSelf();
 
-        $this->carbon->shouldReceive('create', 'day', 'endOfDay', 'subDays')
+        $this->carbon->shouldReceive('create', 'day', 'endOfDay', 'subDays', 'addMonth')
                       ->withAnyArgs()
                       ->andReturnSelf();
 
