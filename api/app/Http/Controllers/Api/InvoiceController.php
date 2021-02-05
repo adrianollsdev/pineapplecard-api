@@ -43,16 +43,14 @@ class InvoiceController extends Controller
     public function show(Profile $profile, $monthYear)
     {
         //
-        $dueDate = Carbon::create($monthYear . "-" . strval($profile->payment_day))->addMonth();
+        $dueDate = Carbon::create($monthYear)->day($profile->payment_day)->addMonth();
 
         $payment = new Payment();
-
         $repository = new InvoiceRepository($payment);
 
-        $invoicePayments = new PaymentCollection($repository->invoiceByDueDate($dueDate));
-        $totalValueInvoice = $repository->valueTotalByInvoice($dueDate);
+        $invoices = $repository->getInvoices($dueDate);
 
-        return ["header" => $totalValueInvoice, "body" => $invoicePayments];
+        return $invoices;
 
     }
 

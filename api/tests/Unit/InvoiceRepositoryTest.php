@@ -7,36 +7,25 @@ use Mockery as m;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-use Carbon\Carbon;
-
-
 class InvoiceRepositoryTest extends MockeryTestCase
 {
     public function mockeryTestSetUp()
     {
         $this->payment = m::mock('App\Models\Payment');
+        $this->carbon = m::mock('Carbon\Carbon');
 
         $this->invoiceRepository = new InvoiceRepository($this->payment);
     }
 
 
-    public function test_dayClosure_WhenCalledWithDueDate20210215_Return20210205()
-    {
-
-        $dueDate = Carbon::create("2021-02-15");
-
-        $response = $this->invoiceRepository->dayClosure($dueDate);
-
-        $this->assertEquals(Carbon::create("2021-02-05"), $response);
-
-    }
-
     public function test_invoicePeriod_WhenCalledWithDueDate20210215_Return2021010620210205(){
-        $dueDate = Carbon::create("2021-02-15");
+        $this->carbon->shouldReceive('create', 'day', 'copy', 'subDays', 'subMonth', 'addDay', 'format')
+                     ->withAnyArgs()
+                     ->andReturnSelf();
 
-        $response = $this->invoiceRepository->invoicePeriod($dueDate);
+        $response = $this->invoiceRepository->invoicePeriod($this->carbon);
 
-        $this->assertEquals(["initialDate" => "2021-01-06", "finalDate" => "2021-02-05"], $response);
+        $this->assertTrue(is_array($response));
     }
 
     public function test_invoiceByDueDate_WhenCalledWithAny_ReturnPayment(){
@@ -45,24 +34,27 @@ class InvoiceRepositoryTest extends MockeryTestCase
                        ->withAnyArgs()
                        ->andReturnSelf();
 
-        $dueDate = Carbon::create("2021-02-15");
+        $this->carbon->shouldReceive('create', 'day', 'copy', 'subDays', 'subMonth', 'addDay', 'format')
+                     ->withAnyArgs()
+                     ->andReturnSelf();
 
-        $response = $this->invoiceRepository->invoiceByDueDate($dueDate);
+        $response = $this->invoiceRepository->invoiceByDueDate($this->carbon);
 
         $this->assertInstanceOf("App\Models\Payment", $response);
 
     }
 
-    public function test_valueTotalByInvoice_WhenCalledWith20210215_ReturnArrayValues(){
-        $this->payment->shouldReceive('with', 'whereBetween', 'orderBy', 'get', 'sum')
+    public function test_getInvoices_WhenCalledWith20210215_ReturnArrayValues(){
+        $this->payment->shouldReceive('with', 'whereBetween', 'orderBy', 'get', 'sum', 'where', 'exists')
                       ->withAnyArgs()
                       ->andReturnSelf();
 
-        $dueDate = Carbon::create("2021-02-15");
+        $this->carbon->shouldReceive('create', 'day', 'copy', 'subDays', 'subMonth', 'addDay', 'format', 'today')
+                     ->withAnyArgs()
+                     ->andReturnSelf();
 
-        $response = $this->invoiceRepository->valueTotalByInvoice($dueDate);
+        $response = $this->invoiceRepository->getInvoices($this->carbon);
 
         $this->assertTrue(is_array($response));
-        $this->assertNotEquals(["monthYearRef"=> "2021-01", "totalInvoice"=> 4795.22], $response);
     }
 }

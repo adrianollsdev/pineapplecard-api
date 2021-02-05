@@ -4,12 +4,12 @@ namespace App\Repositories;
 
 use App\Models\Payment;
 
-class InvoiceRepository
+class InvoiceRepository extends PaymentRepository
 {
 
-    /**
-     * @var Payment
-     */
+    // /**
+    //  * @var Payment
+    //  */
 
      private $payment;
 
@@ -18,19 +18,12 @@ class InvoiceRepository
         $this->payment = $payment;
      }
 
-    public function dayClosure($dueDate, $qtdDays = 10)
-    {
-        // echo "\n[dayClosure] Starting...";
-
-        return $dueDate->subDays($qtdDays);
-    }
-
     public function invoicePeriod($dueDate){
 
         // echo "\n[invoicePeriod] Starting...";
 
-        $initialDate = $this->dayClosure($dueDate->copy()->subMonth())->addDay();
-        $finalDate   = $this->dayClosure($dueDate->copy());
+        $initialDate = $this->dateClosure($dueDate->copy()->subMonth())->addDay();
+        $finalDate   = $this->dateClosure($dueDate->copy());
 
         return array('initialDate' => $initialDate->format('Y-m-d'), 'finalDate' => $finalDate->format('Y-m-d'));
     }
@@ -46,12 +39,23 @@ class InvoiceRepository
                                        ->get();
     }
 
-    public function valueTotalByInvoice($dueDate)
+    public function getInvoices($dueDate)
     {
         // echo "[valueTotalByInvoice] Starting...\n";
+        $ref_month_year = $dueDate->copy()->subMonth()->format('Y-m');
         $invoices = $this->invoiceByDueDate($dueDate);
 
-        return array('monthYearRef' => $dueDate->copy()->subMonth()->format('Y-m'), 'totalInvoice' => $invoices->sum('amount'));
+        $invoicePaid = $this->payment->where('ref_month_year', $ref_month_year)->exists();
+
+        $invoiceClosure = $this->dateClosure($dueDate) < $dueDate->copy()->today() ? true : false;
+
+        return ['header' => ['monthYearRef' => $ref_month_year,
+                             'invoicePaid' => $invoicePaid,
+                             'invoiceClosure' => $invoiceClosure,
+                             'totalInvoice' => $invoices->sum('amount')
+                            ],
+                'body' => $invoices
+                ];
 
     }
 
