@@ -19,7 +19,7 @@ class ProfileRepository
         $limitAvailable = $this->profile->total_limit - $limitUsed;
 
         if (!empty($limitUsed) && !empty($limitAvailable)) {
-            $limits =  ['limitAvailable' => $limitAvailable, 'limitUsed' => $limitUsed];
+            $limits =  ['limitAvailable' => round($limitAvailable, 2), 'limitUsed' => round($limitUsed, 2)];
         }
         return $limits;
     }
@@ -28,7 +28,7 @@ class ProfileRepository
         $limits = $this->limitAvailableCalculation($dateCarbon);
 
         return [
-                'limits' => $limits, 'profile' => $this->profile
+                'limits' => $limits, 'points' => $this->payment->getPointsCard(), 'profile' => $this->profile
                ];
     }
 }

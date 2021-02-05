@@ -43,4 +43,11 @@ class PaymentRepositoryTest extends TestCase
 
         $this->assertInstanceOf("App\Models\Payment", $response);
     }
+
+    public function test_getPointsCard_whenCalledWithNothing_returnvaluePoints()
+    {
+        $this->payment->shouldReceive('with',['where' => null],'get')
+                      ->withAnyArgs()
+                      ->andReturn();
+    }
 }
