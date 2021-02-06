@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PaymentCollection;
+use App\Models\Profile;
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Repositories\PaymentRepository;
 
 class PaymentController extends Controller
 {
@@ -36,10 +38,16 @@ class PaymentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Profile $profile, $monthYear)
     {
         //
-        return new PaymentCollection(Payment::with('establishment.establishmentCategory')->where('id', $id)->get());
+        $dueDate = Carbon::create($monthYear)->day($profile->payment_day)->addMonth();
+        $payment = new Payment();
+        $repository = new PaymentRepository($payment);
+
+        $invoices = $repository->getInvoices($dueDate);
+
+        return $invoices;
     }
 
     /**

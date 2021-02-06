@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\PaymentController;
-use App\Http\Controllers\Api\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,10 +26,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResource('profile', ProfileController::class);
 
-Route::prefix('payment')->group(function(){
-        Route::get('/{id}', [PaymentController::class, 'show']);
+Route::prefix('payment')->group(function () {
+    Route::get('/{profile}/{monthYear}', [PaymentController::class, 'show']);
 });
 
-Route::prefix('invoice')->group(function () {
-    Route::get('/{profile}/{monthYear}', [InvoiceController::class, 'show']);
-});

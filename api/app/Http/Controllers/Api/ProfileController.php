@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProfileCollection;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Profile;
 use App\Repositories\PaymentRepository;
-use App\Repositories\ProfileRepository;
 use Carbon\Carbon;
 
 class ProfileController extends Controller
@@ -42,12 +42,18 @@ class ProfileController extends Controller
     public function show(Profile $profile)
     {
         //
+        $dateCarbon = new Carbon();
         $payment = new Payment();
         $paymentRepository = new PaymentRepository($payment);
-        $profile = new ProfileRepository($profile, $paymentRepository);
-        $dateCarbon = new Carbon();
 
-        return $profile->getProfile($dateCarbon);
+        $limits = $paymentRepository->limitAvailableCalculation($dateCarbon, $profile->total_limit, $profile->payment_day);
+        $points = $paymentRepository->getPointsCard();
+
+        return [
+                'limits' => $limits,
+                'points' => $points,
+                'profile' =>$profile
+               ];
     }
 
     /**
