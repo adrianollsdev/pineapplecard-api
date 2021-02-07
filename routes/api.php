@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 // Route::prefix('profile')->group(function(){
 //     Route::apiResource('profile', PhotoController::class);
 // });
