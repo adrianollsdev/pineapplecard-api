@@ -29,7 +29,7 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=pineapplecard
-      - MYSQL_DATABASE=pineapplecard
+      - MYSQL_DATABASE=pineapple
       - MYSQL_USER=pineapplecard
       - MYSQL_PASSWORD=pineapplecard
 
