@@ -115,20 +115,11 @@ class PaymentRepository
             }
 
             $dataHeader = [
-<<<<<<< HEAD
                             'dueDate' => $dueDate->copy()->format('d M'),
                             'invoiceType' => $invoiceType,
                             'monthYearRef' => $refMonthYear,
                             'totalInvoice' => $totalInvoices
                         ];
-=======
-                strval($i) => [
-                       'dueDate' => $dueDate->copy()->format('d M'),
-                       'monthYearRef' => $refMonthYear,
-                        'invoiceType' => $invoiceType,
-                       'totalInvoice' => $totalInvoices]
-            ];
->>>>>>> parent of d2f2364... changing getHeaderAllPeriods
 
             array_push($dataHeaderInvoices, $dataHeader);
 
