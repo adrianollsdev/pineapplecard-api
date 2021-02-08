@@ -96,7 +96,6 @@ class PaymentRepository
         $dueDate = $dateCarbon->copy()->create($this->payment->min('created_at'))->addMonth()->day($dueDay);
         $maxDueDate = $dateCarbon->copy()->create($this->payment->max('created_at'))->addMonth()->day($dueDay);
         $dataHeaderInvoices = [];
-        $i = 1;
 
         while ($maxDueDate > $dueDate) {
             $invoices = $this->invoiceByDueDate($dueDate->copy());
@@ -124,7 +123,6 @@ class PaymentRepository
             array_push($dataHeaderInvoices, $dataHeader);
 
             $dueDate->addMonth();
-            $i++;
 
         }
 
