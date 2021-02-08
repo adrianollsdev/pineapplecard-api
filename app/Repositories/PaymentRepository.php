@@ -115,12 +115,11 @@ class PaymentRepository
             }
 
             $dataHeader = [
-                strval($i) => [
-                       'dueDate' => $dueDate->copy()->format('d M'),
-                       'monthYearRef' => $refMonthYear,
-                        'invoiceType' => $invoiceType,
-                       'totalInvoice' => $totalInvoices]
-            ];
+                            'dueDate' => $dueDate->copy()->format('d M'),
+                            'monthYearRef' => $refMonthYear,
+                            'invoiceType' => $invoiceType,
+                            'totalInvoice' => $totalInvoices
+                        ];
 
             array_push($dataHeaderInvoices, $dataHeader);
 
