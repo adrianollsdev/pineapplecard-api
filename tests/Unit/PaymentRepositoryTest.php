@@ -150,6 +150,24 @@ class PaymentRepositoryTest extends TestCase
         $this->assertTrue(is_bool($response));
     }
 
+    public function test_getHeaderAllPeriods_WhenCalledWithCarbonAndDueDay_ReturnArray()
+    {
+        $payment_day = 10;
+
+
+        $this->carbon->shouldReceive('copy->create->addMonth->day', 'copy->subMonth', 'addDay', 'subDays', 'format', 'copy->subMonth->format', 'copy->today')
+                     ->andReturnSelf();
+
+
+        $this->payment->shouldReceive('with', 'whereBetween', 'orderBy', 'get', 'all', 'where', 'exists', 'sum', 'min', 'max')
+                      ->andReturnSelf();
+
+
+        $response = $this->paymentRepository->getHeaderAllPeriods($this->carbon, $payment_day);
+
+        $this->assertTrue(is_array($response));
+    }
+
     public function test_getInvoices_WhenCalledWith20210215_ReturnArrayValues()
     {
         $dueDate = new Carbon('2021-01-05');

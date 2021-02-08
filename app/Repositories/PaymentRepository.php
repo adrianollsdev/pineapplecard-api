@@ -71,7 +71,7 @@ class PaymentRepository
 
     public function invoiceByDueDate($dueDate)
     {
-        $invoicePeriod = $this->invoicePeriod($dueDate);
+        $invoicePeriod = $this->invoicePeriod($dueDate->copy());
 
         return $this->payment->with('establishment.establishmentCategory')
                              ->whereBetween('created_at', array_values($invoicePeriod))
@@ -89,7 +89,45 @@ class PaymentRepository
     }
 
     public function invoiceClosure($dueDate){
-        return $this->dateClosure($dueDate) < $dueDate->copy()->today() ? true : false;
+        return $this->dateClosure($dueDate->copy()) < $dueDate->copy()->today() ? true : false;
+    }
+
+    public function getHeaderAllPeriods(Carbon $dateCarbon, $dueDay){
+        $dueDate = $dateCarbon->copy()->create($this->payment->min('created_at'))->addMonth()->day($dueDay);
+        $maxDueDate = $dateCarbon->copy()->create($this->payment->max('created_at'))->addMonth()->day($dueDay);
+        $dataHeaderInvoices = [];
+        $i = 1;
+
+        while ($maxDueDate > $dueDate) {
+            $invoices = $this->invoiceByDueDate($dueDate->copy());
+            $refMonthYear = $dueDate->copy()->subMonth()->format('Y-m');
+            $invoicePaid = $this->invoicePaid($refMonthYear);
+            $invoiceClosure = $this->invoiceClosure($dueDate);
+            $totalInvoices = round($this->getValueTotalInvoices($invoices), 2);
+
+            if ($invoiceClosure === true && $invoicePaid === true)
+            {
+                $invoiceType = 'paid';
+            } elseif ($invoiceClosure === false && $invoicePaid === false){
+                $invoiceType = 'open';
+            } else {
+                $invoiceType = 'closed';
+            }
+
+            $dataHeader = [
+                strval($i) => ['monthYearRef' => $refMonthYear,
+                        'invoiceType' => $invoiceType,
+                       'totalInvoice' => $totalInvoices]
+            ];
+
+            array_push($dataHeaderInvoices, $dataHeader);
+
+            $dueDate->addMonth();
+            $i++;
+
+        }
+
+        return $dataHeaderInvoices;
     }
 
     public function getInvoices($dueDate)
@@ -105,6 +143,7 @@ class PaymentRepository
 
         return [
             'header' => [
+                'dueDate' => $dueDate,
                 'monthYearRef' => $refMonthYear,
                 'invoicePaid' => $invoicePaid,
                 'invoiceClosure' => $invoiceClosure,

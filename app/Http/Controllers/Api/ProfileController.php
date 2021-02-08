@@ -46,13 +46,16 @@ class ProfileController extends Controller
         $payment = new Payment();
         $paymentRepository = new PaymentRepository($payment);
 
-        $limits = $paymentRepository->limitAvailableCalculation($dateCarbon, $profile->total_limit, $profile->payment_day);
+        $limits = $paymentRepository->limitAvailableCalculation($dateCarbon->copy(), $profile->total_limit, $profile->payment_day);
         $points = $paymentRepository->getPointsCard();
+
+        $headerAllPeriods = $paymentRepository->getHeaderAllPeriods($dateCarbon->copy(), $profile->payment_day);
 
         return response()->json([
                 'limits' => $limits,
                 'points' => $points,
-                'profile' =>$profile
+                'profile' => $profile,
+                'headers' => $headerAllPeriods
                ]);
     }
 
