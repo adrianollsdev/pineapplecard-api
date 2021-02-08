@@ -49,11 +49,11 @@ class ProfileController extends Controller
         $limits = $paymentRepository->limitAvailableCalculation($dateCarbon, $profile->total_limit, $profile->payment_day);
         $points = $paymentRepository->getPointsCard();
 
-        return [
+        return response()->json([
                 'limits' => $limits,
                 'points' => $points,
                 'profile' =>$profile
-               ];
+               ]);
     }
 
     /**

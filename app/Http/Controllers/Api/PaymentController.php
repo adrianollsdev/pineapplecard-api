@@ -47,7 +47,7 @@ class PaymentController extends Controller
 
         $invoices = $repository->getInvoices($dueDate);
 
-        return $invoices;
+        return response()->json($invoices);
     }
 
     /**
