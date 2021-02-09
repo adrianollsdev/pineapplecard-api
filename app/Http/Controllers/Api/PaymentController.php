@@ -58,7 +58,7 @@ class PaymentController extends Controller
 
         $invoices = $repository->getInvoices($dueDate);
 
-        $perPage = 10;
+        /* $perPage = 10;
         $page = $request->input("page") ?? 1;
 
         $offset = ($page * $perPage) - $perPage;
@@ -71,9 +71,9 @@ class PaymentController extends Controller
                 $perPage,
                 $page,
                 ['path' => $this->request->url(), 'query' => $this->request->query()]
-            );
-        // return response()->json($invoices);
-        return $paginator;
+            ); */
+        return response()->json($invoices);
+        // return $paginator;
     }
 
     /**
