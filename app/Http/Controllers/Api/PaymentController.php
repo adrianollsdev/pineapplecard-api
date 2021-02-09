@@ -47,26 +47,7 @@ class PaymentController extends Controller
 
         $invoices = $repository->getInvoices($dueDate);
 
-<<<<<<< HEAD
-        /* $perPage = 10;
-        $page = $request->input("page") ?? 1;
-
-        $offset = ($page * $perPage) - $perPage;
-
-        $invoices = array_slice($invoices, $offset, $perPage, true);
-
-        $paginator = new LengthAwarePaginator(
-                $this->transformer->toResult(collect($invoices)),
-                count($invoices),
-                $perPage,
-                $page,
-                ['path' => $this->request->url(), 'query' => $this->request->query()]
-            ); */
         return response()->json($invoices);
-        // return $paginator;
-=======
-        return response()->json($invoices);
->>>>>>> parent of f1c689d... passport up
     }
 
     /**
