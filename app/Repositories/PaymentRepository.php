@@ -133,25 +133,9 @@ class PaymentRepository
 
     public function getInvoices($dueDate)
     {
-        $refMonthYear = $dueDate->copy()->subMonth()->format('Y-m');
         $invoices = $this->invoiceByDueDate($dueDate);
 
-        $invoicePaid = $this->invoicePaid($refMonthYear);
-
-        $invoiceClosure = $this->invoiceClosure($dueDate);
-
-        $totalInvoices = $this->getValueTotalInvoices($invoices);
-
-        return [
-            'header' => [
-                'dueDate' => $dueDate,
-                'monthYearRef' => $refMonthYear,
-                'invoicePaid' => $invoicePaid,
-                'invoiceClosure' => $invoiceClosure,
-                'totalInvoice' => $totalInvoices
-            ],
-            'body' => $invoices
-        ];
+        return [ $invoices ];
     }
 
 
