@@ -8,12 +8,9 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Repositories\PaymentRepository;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class PaymentController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      *
@@ -35,22 +32,14 @@ class PaymentController extends Controller
         //
     }
 
-    private function transformAnswers($answers, $offset, $perPage)
-    {
-        $answers = array_slice($answers, $offset, $perPage, true);
-
-        return $this->transformer->toResult(collect($answers));
-    }
-
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Profile $profile, $monthYear, Request $request)
+    public function show(Profile $profile, $monthYear)
     {
-
         //
         $dueDate = Carbon::create($monthYear)->day($profile->payment_day)->addMonth();
         $payment = new Payment();
@@ -58,6 +47,7 @@ class PaymentController extends Controller
 
         $invoices = $repository->getInvoices($dueDate);
 
+<<<<<<< HEAD
         /* $perPage = 10;
         $page = $request->input("page") ?? 1;
 
@@ -74,6 +64,9 @@ class PaymentController extends Controller
             ); */
         return response()->json($invoices);
         // return $paginator;
+=======
+        return response()->json($invoices);
+>>>>>>> parent of f1c689d... passport up
     }
 
     /**

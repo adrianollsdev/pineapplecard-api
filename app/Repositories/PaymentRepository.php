@@ -135,7 +135,7 @@ class PaymentRepository
     {
         $invoices = $this->invoiceByDueDate($dueDate);
 
-        return array($invoices);
+        return $invoices;
     }
 
 
