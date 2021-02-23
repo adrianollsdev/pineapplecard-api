@@ -180,6 +180,6 @@ class PaymentRepositoryTest extends TestCase
 
         $response = $this->paymentRepository->getInvoices($dueDate);
 
-        $this->assertTrue(is_array($response));
+        $this->assertTrue(is_object($response));
     }
 }
